@@ -71,49 +71,44 @@ function calculate(str)
 	var expression = str;
 	var copy = expression;
 
-	expression = expression.replace(/[0-9]+/g, "#").replace(/[\(|\|\.)]/g, "");
+	expression = expression.replace(/[0-9]+/g, "#");
 	var numbers = copy.split(/[^0-9\.]+/);
 	var operators = expression.split("#").filter(function(n){return n});
-	var result = [];
 
 	if(str.charAt(0) == '-')
 	{
 		iseven = true;
-		var num = parseFloat(numbers[0]) * (-1);
-		numbers[0] = 
+		numbers[0] = (parseFloat(numbers[0]) * (-1)).toString(); 
 		operators.splice(0,1);
 	}
 
-	for(var i = 0; i <operators.length;i++)
-	{
-		var left;
-		var right;
-		if(operators[i]=='/')
-		{
-			if(iseven)
-			{
-				left = numbers[i-1];
-			    right = numbers[i];
-
-			    var res = left/right;
-
-			    numbers[i-1] = res;
-			    numbers.splice(i,1);
-			}
-			else
-			{
-				left = numbers[i];
-				right = numbers[i+1];
-
-				var res = left/right;
-				numbers[i] = res;
-				numbers.splice(i+1,1);
-			}
-
-			operators.splice(i,1);
-			i = i-1;
+	for (var i = 0; i <= operators.length; i++) {
+		if (operators[i]=='/') {
+			numbers[i]=parseFloat(numbers[i])/parseFloat(numbers[i+1]);
+			numbers.splice(i+1,1);
+			operators.splice(i);
 		}
 	}
+	for (var i=0; i<=operators.length; i++){
+		if (operators[i]=='*') {
+			numbers[i]=parseFloat(numbers[i])*parseFloat(numbers[i+1]);
+			numbers.splice(i+1,1);
+			operators.splice(i);
+        }
+	}
+	for (var i=0; i<=operators.length; i++){
+		if (operators[i]=='+') {
+			numbers[i]=parseFloat(numbers[i])+parseFloat(numbers[i+1]);
+		}
+	}
+	for (var i=0; i<=operators.length; i++){
+		if (operators[i]=='-') {
+			numbers[i]=parseFloat(numbers[i])-parseFloat(numbers[i+1]);
+		}
+	}
+
+
+	
 
 }
 
